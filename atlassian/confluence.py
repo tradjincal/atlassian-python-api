@@ -87,8 +87,18 @@ class Confluence(AtlassianRestAPI):
             if "results" not in response:
                 return
 
-            for value in response.get("results", []):
-                yield value
+            try:
+                for value in response.get("results", []):
+                    
+                    yield value
+
+            except HTTPError as error:
+                if error.response.status_code == 404:
+                    raise ApiPermissionError(
+                        "The calling user does not have permission to view the content",
+                        reason=error,
+                    )
+                raise
 
             # According to Cloud and Server documentation the links are returned the same way:
             # https://developer.atlassian.com/cloud/confluence/rest/api-group-content/#api-wiki-rest-api-content-get
