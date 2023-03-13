@@ -30,6 +30,11 @@ class Confluence(AtlassianRestAPI):
             url = AtlassianRestAPI.url_joiner(url, "/wiki")
             if "cloud" not in kwargs:
                 kwargs["cloud"] = True
+            if "api_root" not in kwargs:
+                kwargs["api_root"]="wiki/api"
+        
+        if "api_version" not in kwargs:
+            kwargs["api_version"] = "v2"
         super(Confluence, self).__init__(url, *args, **kwargs)
 
     @staticmethod
